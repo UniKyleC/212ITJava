@@ -75,22 +75,26 @@ public class PersonalContacts extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		//create the scrollpane for the table to go into
 		JScrollPane scrollPane = new JScrollPane();
+		//create the database connection
 		dbConn d=new dbConn();
-		
+		//create the refresh button with text
 		JButton btnRefresh = new JButton("Refresh Grid");
+		//add an event on mouse-cilck
 		btnRefresh.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				//set the model for the table based on the result set from calling the method 'GetAllPersonal'
 				table.setModel(DbUtils.resultSetToTableModel(d.GetAllPersonal()));
 				table.setDefaultEditor(Object.class, null);
-				
+				//set the correct buttons to be enabled
 				btnAddNew.setEnabled(true);
 				btnUpdateSelected.setEnabled(true);
 				btnDeleteSelected.setEnabled(true);
 			}
 		});
-		
+		//creation of various text boxes which are disabled by default, and labels for them
 		txbxLastName = new JTextField();
 		txbxLastName.setEnabled(false);
 		txbxLastName.setColumns(10);
@@ -144,9 +148,10 @@ public class PersonalContacts extends JFrame {
 		lblCity = new JLabel("City");
 		
 		lblPostcode = new JLabel("Postcode");
-		
+		//Sets up the button UpdateSelected, making it disabled by default until 'refresh grid' is clicked
 		btnUpdateSelected = new JButton("Update Selected");
 		btnUpdateSelected.setEnabled(false);
+		//when the button is clicked, enable the text boxes and disable/enable relevant buttons
 		btnUpdateSelected.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -170,8 +175,9 @@ public class PersonalContacts extends JFrame {
 				
 			}
 		});
-		
+		//new button save selected
 		btnSaveSelected = new JButton("Save Selected");
+		//on mouse click, get the text from the text boxes, pass them to strings which become parameters in the called updatePersonal Method
 		btnSaveSelected.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -185,7 +191,7 @@ public class PersonalContacts extends JFrame {
 				String conCity = txbxCity.getText();
 				String conPostcode = txbxPostcode.getText();
 				int conID = savedid;
-		
+		//pass the parameters we just created to the method, then disable/enable relevant buttons + txt boxes
 				d.updatePersonal(conFName, conLName, conTel, conHTel, conEmail, conAddr1, conAddr2, conCity, conPostcode, conID);
 				btnSaveSelected.setEnabled(false);
 				btnDeleteSelected.setEnabled(true);
@@ -205,20 +211,25 @@ public class PersonalContacts extends JFrame {
 				
 			}
 		});
+		//sets the btn disabled as default
 		btnSaveSelected.setEnabled(false);
-		
+		//creates the delete button
 		btnDeleteSelected = new JButton("Delete Selected");
+		//upon clicking the button, call the delete method
 		btnDeleteSelected.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int conID = savedid;
-				 
-				
+				 d.deletePersonal(conID);
+				 	
 			}
 		});
+		//disable this button by default
 		btnDeleteSelected.setEnabled(false);
 		
+		//new 'add new' button
 		btnAddNew = new JButton("Add New");
+		//upon clicking the button set all the text fields to empty, then enable them. Disable/Enable relevant buttons.
 		btnAddNew.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -251,11 +262,14 @@ public class PersonalContacts extends JFrame {
 				btnSaveNew.setEnabled(true);
 			}
 		});
+		//disabled button by default
 		btnAddNew.setEnabled(false);
-		
+		//new save new button
 		btnSaveNew = new JButton("Save New");
+		//code triggers on a mouse click
 		btnSaveNew.addMouseListener(new MouseAdapter() {
 			@Override
+			//sets the string data to what is in the text boxes, ready to be passed as parameters
 			public void mouseClicked(MouseEvent e) {
 				String conFName = txbxFirstName.getText();
 				String conLName = txbxLastName.getText();
@@ -266,10 +280,10 @@ public class PersonalContacts extends JFrame {
 				String conAddr2 = txbxAddr2.getText();
 				String conCity = txbxCity.getText();
 				String conPostcode = txbxPostcode.getText();
-				
+				//calls the insertPersonalmethod, passing it the parameters we just specified
 				d.insertPersonal(conFName, conLName, conTel, conHTel, conEmail, conAddr1, conAddr2, conCity, conPostcode);
 				
-
+//enables/disables txbxs and buttons
 				txbxFirstName.setEnabled(false);
 				txbxLastName.setEnabled(false);
 				txbxEmail.setEnabled(false);
@@ -287,10 +301,13 @@ public class PersonalContacts extends JFrame {
 				btnSaveNew.setEnabled(false);
 			}
 		});
+		//sets the button to be disabled unless enabled otherwise
 		btnSaveNew.setEnabled(false);
-		
+		//new table within the scrollpane
 		table = new JTable();
+		//allow only single-row selections
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		//on mouse click trigger the code to put the values of the table into the text boxes!
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

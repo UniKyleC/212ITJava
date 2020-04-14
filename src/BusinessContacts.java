@@ -75,23 +75,24 @@ public class BusinessContacts extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
+//create the scrollpane		
 		JScrollPane scrollPane = new JScrollPane();
+		//create the database connection
 		dbConn d=new dbConn();
-		
+		//new button with mouse-click event that sets the table's model to the data of the database 
 		JButton btnRefresh = new JButton("Refresh Grid");
 		btnRefresh.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				table.setModel(DbUtils.resultSetToTableModel(d.GetAllBusiness()));
 				table.setDefaultEditor(Object.class, null);
-				
+				//enabling the buttons
 				btnAddNew.setEnabled(true);
 				btnUpdateSelected.setEnabled(true);
 				btnDeleteSelected.setEnabled(true);
 			}
 		});
-		
+		//setting up txbxs and disabling them by default
 		txbxLastName = new JTextField();
 		txbxLastName.setEnabled(false);
 		txbxLastName.setColumns(10);
@@ -127,7 +128,7 @@ public class BusinessContacts extends JFrame {
 		txbxPostcode = new JTextField();
 		txbxPostcode.setEnabled(false);
 		txbxPostcode.setColumns(10);
-		
+		//setting up labels
 		JLabel lblFirstName = new JLabel("First Name");
 		
 		lblLastName = new JLabel("Last Name");
@@ -145,13 +146,13 @@ public class BusinessContacts extends JFrame {
 		lblCity = new JLabel("City");
 		
 		lblPostcode = new JLabel("Postcode");
-		
+		//new button, disabled by default with mouse-click event listener, so code is triggered upon clicking
 		btnUpdateSelected = new JButton("Update Selected");
 		btnUpdateSelected.setEnabled(false);
 		btnUpdateSelected.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				//enables text boxes for typing and disbales/enables relevant buttons
 				txbxFirstName.setEnabled(true);
 				txbxLastName.setEnabled(true);
 				txbxEmail.setEnabled(true);
@@ -171,11 +172,12 @@ public class BusinessContacts extends JFrame {
 				
 			}
 		});
-		
+		//new button, event on mouse click, disabled by default
 		btnSaveSelected = new JButton("Save Selected");
 		btnSaveSelected.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				//setting parameters via getting the info from the textboxes
 				String conFName = txbxFirstName.getText();
 				String conLName = txbxLastName.getText();
 				String conTel = txbxTel.getText();
@@ -186,8 +188,9 @@ public class BusinessContacts extends JFrame {
 				String conCity = txbxCity.getText();
 				String conPostcode = txbxPostcode.getText();
 				int conID = savedid;
-		
+		//calling the method from the dbConn class, passing it those parameters we just made
 				d.updateBusiness(conFName, conLName, conTel, conHTel, conEmail, conAddr1, conAddr2, conCity, conPostcode, conID);
+				//disable/enable relevant content
 				btnSaveSelected.setEnabled(false);
 				btnDeleteSelected.setEnabled(true);
 				btnAddNew.setEnabled(true);
@@ -208,22 +211,26 @@ public class BusinessContacts extends JFrame {
 		});
 		btnSaveSelected.setEnabled(false);
 		
+		//new button with click event 
 		btnDeleteSelected = new JButton("Delete Selected");
 		btnDeleteSelected.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int conID = savedid;
-				 
+				//calls deletebusiness method, pasing it One Parameter
+				 d.deleteBusiness(conID);
 			}
 		
 			});
+		//disabels button by defualt
 		btnDeleteSelected.setEnabled(false);
 		
+		//new button, mouse-click event, disabled by default
 		btnAddNew = new JButton("Add New");
 		btnAddNew.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
+//sets the text boxes to empty strings
 				txbxFirstName.setText("");
 				txbxLastName.setText("");
 				txbxEmail.setText("");
@@ -233,7 +240,7 @@ public class BusinessContacts extends JFrame {
 				txbxAddr2.setText("");
 				txbxCity.setText("");
 				txbxPostcode.setText("");
-				
+				//enables text boxes for user input
 				txbxFirstName.setEnabled(true);
 				txbxLastName.setEnabled(true);
 				txbxEmail.setEnabled(true);
@@ -243,7 +250,7 @@ public class BusinessContacts extends JFrame {
 				txbxAddr2.setEnabled(true);
 				txbxCity.setEnabled(true);
 				txbxPostcode.setEnabled(true);
-
+//enables/disables relevant buttons
 				btnAddNew.setEnabled(false);
 				btnRefresh.setEnabled(false);
 				btnUpdateSelected.setEnabled(false);
@@ -252,8 +259,9 @@ public class BusinessContacts extends JFrame {
 				btnSaveNew.setEnabled(true);
 			}
 		});
+		//disables button by default
 		btnAddNew.setEnabled(false);
-		
+		//new button, mouse click event
 		btnSaveNew = new JButton("Save New");
 		btnSaveNew.addMouseListener(new MouseAdapter() {
 			@Override
@@ -267,9 +275,9 @@ public class BusinessContacts extends JFrame {
 				String conAddr2 = txbxAddr2.getText();
 				String conCity = txbxCity.getText();
 				String conPostcode = txbxPostcode.getText();
-				
+				//after getting data from txbxs pass it to the insertBusiness method from dbconn
 				d.insertBusiness(conFName, conLName, conTel, conHTel, conEmail, conAddr1, conAddr2, conCity, conPostcode);
-				
+				//enable and disable txbxs/buttons as apporpirate
 
 				txbxFirstName.setEnabled(false);
 				txbxLastName.setEnabled(false);
@@ -288,8 +296,10 @@ public class BusinessContacts extends JFrame {
 				btnSaveNew.setEnabled(false);
 			}
 		});
+		//dsiables button by dafult
 		btnSaveNew.setEnabled(false);
 		
+		//new table, single-row selection only, mouse click event which puts the data into the text boxes based off which row is clicked.
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.addMouseListener(new MouseAdapter() {
